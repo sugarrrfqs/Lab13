@@ -1,0 +1,116 @@
+#include <iostream>
+
+using namespace std;
+
+int board[8][8];
+
+bool check (int);
+void place (int, int);
+void remove (int, int);
+void printBoard ();
+
+int main()
+{
+  setlocale(LC_ALL,"Russian");
+
+	for (int i = 0; i < 8; i++)
+  {
+    for (int j = 0; j < 8; j++)
+    {
+      board[i][j] = 0;
+    }
+	}
+		
+  check(0);
+
+  cout<<"Ответ:\n";
+  printBoard();
+}
+
+bool check(int i) 
+{
+  bool result = false;
+  int j=0;
+
+  while (j<8 && !result)
+	{
+    if (board[i][j] == 0)
+		{
+      place (i, j);
+      if (i == 7)
+      {
+        result = true;
+      }
+			else 
+      {
+        if (!(result = check(i + 1))) remove (i, j);
+      }
+		}
+    j++;
+  }
+  return result;
+}
+
+void place (int i, int j) 
+{
+	for (int x = 0; x < 8; x++)
+	{
+		board[x][j]++;
+		board[i][x]++;
+		int dia;
+		dia = j - i + x;
+
+		if (dia >= 0 && dia < 8)
+    {
+			board[x][dia]++;
+    }
+		dia = j + i - x;
+
+		if (dia >= 0 && dia < 8)
+    {
+			board[x][dia]++;
+    }
+
+		board[i][j] = -1;
+
+	}
+	printBoard();
+}
+
+void remove (int i, int j) 
+{
+  for (int x = 0; x < 8; ++x)
+	{
+		board[x][j]--;
+		board[i][x]--;
+		int dia;
+		dia=j-i+x;
+
+		if (dia>=0 && dia<8)
+    {
+			board[x][dia]--;
+    }
+		dia = j + i - x;
+
+		if (dia >= 0 && dia < 8)
+    {
+			board[x][dia]--;
+    }
+    board[i][j] = 0;
+  }
+	printBoard();
+}
+
+void printBoard ()
+{
+    for (int i=0;i<8;i++)
+    {
+        for (int j=0;j<8;j++)
+        {
+            if (board[i][j]>=0)cout<<' '<<board[i][j]<<' ';
+            else cout<<board[i][j]<<' ';
+        }
+        cout<<'\n';
+    }
+    cout<<'\n';
+}
